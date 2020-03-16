@@ -22,12 +22,34 @@ import in.co.online.food.delivery.util.DataUtility;
 import in.co.online.food.delivery.util.DataValidator;
 import in.co.online.food.delivery.util.PropertyReader;
 import in.co.online.food.delivery.util.ServletUtility;
+
+
+/**
+ * Servlet implementation class RoleCtl
+ */
+/**
+ * Role functionality Controller. Performs operation for add, update,
+ * delete and get Role
+ * 
+ * @author Navigable Set
+ * @version 1.0
+ * @Copyright (c) Navigable Set
+ * 
+ */
+
 @WebServlet(name="RestaurantUserCtl",urlPatterns={"/ctl/RestaurantUserCtl"})
 @MultipartConfig(maxFileSize = 16177215)
 public class RestaurantUserCtl extends BaseCtl {
 	private static final long serialVersionUID = 1L;
 	
 	private static Logger log=Logger.getLogger(RestaurantUserCtl.class);
+	/**
+	 * Validate input Data Entered By User
+	 * 
+	 * @param request
+	 * @return
+	 */
+	@Override
     protected boolean validate(HttpServletRequest request) {
 		log.debug("RestaurantUserCtl validate method start");
         boolean pass = true;
@@ -78,6 +100,8 @@ public class RestaurantUserCtl extends BaseCtl {
 		if (!request.getParameter("password").equals(
 				request.getParameter("confirmPassword"))
 				&& !"".equals(request.getParameter("confirmPassword"))) {
+			/*ServletUtility.setErrorMessage("Confirm Password did not match",
+					request);*/
 			request.setAttribute("confirmPassword", PropertyReader.getValue("error.confirmPassword","Confirm Password"));
 			pass = false;
 		}
@@ -104,6 +128,13 @@ public class RestaurantUserCtl extends BaseCtl {
         return pass;
     }
 
+	/**
+	 * Populates bean object from request parameters
+	 * 
+	 * @param request
+	 * @return
+	 */
+	@Override
 	protected BaseBean populateBean(HttpServletRequest request) {
 		log.debug("RestaurantUserCtl populateBean method start");
 		UserBean bean = new UserBean();
@@ -132,6 +163,14 @@ public class RestaurantUserCtl extends BaseCtl {
 		log.debug("RestaurantUserCtl populateBean method end");
 		return bean;
 	}
+	/**
+	 * Contains display logic
+	 */
+	@Override
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		log.debug("RestaurantUserCtl doGet method start"); 
 		String op = DataUtility.getString(request.getParameter("operation"));
@@ -155,6 +194,91 @@ public class RestaurantUserCtl extends BaseCtl {
 	        ServletUtility.forward(getView(), request, response);
 	        log.debug("RestaurantUserCtl doGet method end");
     }
+
+	/**
+	 * Contains submit logic
+	 */
+	@Override
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		 log.debug("RestaurantUserCtl doPost method start");
+		String op=DataUtility.getString(request.getParameter("operation"));
+		UserModel model=new UserModel();
+		long id=DataUtility.getLong(request.getParameter("id"));
+		
+		
+		String savePath = DataUtility.getString(PropertyReader.getValue("path")); 
+		
+		 File fileSaveDir = new File(savePath);
+      if (!fileSaveDir.exists()) {
+          fileSaveDir.mkdir();
+      }
+      
+      
+      Part part = request.getPart("image");
+      
+      String fileName = extractFileName(part);
+      part.write(savePath + File.separator + fileName);
+      
+      String filePath = fileName;
+		
+		if(OP_SAVE.equalsIgnoreCase(op)){
+			
+			UserBean bean=(UserBean)populateBean(request);
+			bean.setImage(filePath);
+			
+				try {
+					if(id>0){
+						
+						
+						
+					model.update(bean);
+					ServletUtility.setOpration("Edit", request);
+					ServletUtility.setSuccessMessage("Data is successfully Updated", request);
+	                ServletUtility.setBean(bean, request);
+
+					}else {
+						long pk=model.add(bean);
+						//bean.setId(id);
+						ServletUtility.setSuccessMessage("Data is successfully Saved", request);
+						ServletUtility.forward(getView(), request, response);
+					}
+	              
+				} catch (ApplicationException e) {
+					e.printStackTrace();
+					ServletUtility.forward(OFDView.ERROR_VIEW, request, response);
+					return;
+				
+			} catch (DuplicateRecordException e) {
+				ServletUtility.setBean(bean, request);
+				ServletUtility.setErrorMessage(e.getMessage(),
+						request);
+			}
+			
+		}else if (OP_DELETE.equalsIgnoreCase(op)) {
+			UserBean bean=	(UserBean)populateBean(request);
+		try {
+			model.delete(bean);
+			ServletUtility.redirect(OFDView.RESTAURANT_OWNER_LIST_CTL, request, response);
+		} catch (ApplicationException e) {
+			ServletUtility.handleException(e, request, response);
+			e.printStackTrace();
+		}
+		}else if (OP_CANCEL.equalsIgnoreCase(op)) {
+			ServletUtility.redirect(OFDView.RESTAURANT_OWNER_LIST_CTL, request, response);
+			return;
+	}else if (OP_RESET.equalsIgnoreCase(op)) {
+		ServletUtility.redirect(OFDView.RESTAURANT_OWNER_CTL, request, response);
+		return;
+}
+				
+		
+		ServletUtility.forward(getView(), request, response);
+		 log.debug("RestaurantUserCtl doPost method end");
+	}
 	
 	
 	private String extractFileName(Part part) {
@@ -167,6 +291,12 @@ public class RestaurantUserCtl extends BaseCtl {
         }
         return "";
     }
+	/**
+	 * Returns the VIEW page of this Controller
+	 * 
+	 * @return
+	 */
+	@Override
 	protected String getView() {
 		// TODO Auto-generated method stub
 		return OFDView.RESTAURANT_OWNER_VIEW;
