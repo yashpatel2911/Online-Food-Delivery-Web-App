@@ -30,6 +30,7 @@ public class ChangePasswordCtl extends BaseCtl {
 	public static final String OP_CHANGE_MY_PROFILE = "Change My Profile";
 	public static final String OP_CHANGE_MY_PASSWORD = "ChangePassword";
 
+	@Override
 	protected boolean validate(HttpServletRequest request) {
 		log.debug("ChangePasswordCtl  validate method start");
 
@@ -64,6 +65,8 @@ public class ChangePasswordCtl extends BaseCtl {
 		log.debug("ChangePasswordCtl  validate method end");
 		return pass;
 	}
+	
+	@Override
 	protected BaseBean populateBean(HttpServletRequest request) {
 		log.debug("ChangePasswordCtl  populateBean method start");
 
@@ -129,6 +132,8 @@ public class ChangePasswordCtl extends BaseCtl {
 		log.debug("ChangePasswordCtl  doPost method end");
 	}
 
+	
+	@Override
 	protected String getView() {
 		return OFDView.CHANGE_PASSWORD_VIEW;
 	}

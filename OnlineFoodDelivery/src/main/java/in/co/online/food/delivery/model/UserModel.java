@@ -18,6 +18,7 @@ import in.co.online.food.delivery.util.EmailBuilder;
 import in.co.online.food.delivery.util.EmailMessage;
 import in.co.online.food.delivery.util.EmailUtility;
 import in.co.online.food.delivery.util.JDBCDataSource;
+
 public class UserModel {
 	private static Logger log = Logger.getLogger(UserModel.class);
 	
@@ -73,6 +74,7 @@ public class UserModel {
 		log.debug("Model nextPK End");
 		return pk + 1;
 	}
+
 	public long add(UserBean bean) throws ApplicationException, DuplicateRecordException {
 		
 		Connection conn = null;
@@ -127,6 +129,7 @@ public class UserModel {
 		
 		return pk;
 	}
+
 	public void delete(UserBean bean) throws ApplicationException {
 		
 		Connection conn = null;
@@ -153,9 +156,187 @@ public class UserModel {
 		
 	}
 
-		public List search(UserBean bean) throws ApplicationException {
+	public UserBean findByLogin(String login) throws ApplicationException {
+		log.debug("Model findByLogin Started");
+		StringBuffer sql = new StringBuffer("SELECT * FROM OF_USER WHERE LOGIN=?");
+		UserBean bean = null;
+		Connection conn = null;
+		System.out.println("sql" + sql);
+
+		try {
+			conn = JDBCDataSource.getConnection();
+			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+			pstmt.setString(1, login);
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				bean = new UserBean();
+				bean.setId(rs.getLong(1));
+				bean.setFirstName(rs.getString(2));
+				bean.setLastName(rs.getString(3));
+				bean.setLogin(rs.getString(4));
+				bean.setPassword(rs.getString(5));
+				bean.setMobileNo(rs.getString(6));
+				bean.setEmailId(rs.getString(7));
+				bean.setUserId(rs.getLong(8));
+				bean.setRoleId(rs.getLong(9));
+				bean.setCreatedBy(rs.getString(10));
+				bean.setModifiedBy(rs.getString(11));
+				bean.setCreatedDatetime(rs.getTimestamp(12));
+				bean.setModifiedDatetime(rs.getTimestamp(13));
+				bean.setImage(rs.getString(14));
+
+			}
+			rs.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Database Exception..", e);
+			throw new ApplicationException("Exception : Exception in getting User by login");
+		} finally {
+			JDBCDataSource.closeConnection(conn);
+		}
+		log.debug("Model findByLogin End");
+		return bean;
+	}
+	
+	
+	public UserBean findByMobileNo(String mobileNo) throws ApplicationException {
+		log.debug("Model findByLogin Started");
+		StringBuffer sql = new StringBuffer("SELECT * FROM OF_USER WHERE mobileNo=?");
+		UserBean bean = null;
+		Connection conn = null;
+		System.out.println("sql" + sql);
+
+		try {
+			conn = JDBCDataSource.getConnection();
+			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+			pstmt.setString(1, mobileNo);
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				bean = new UserBean();
+				bean.setId(rs.getLong(1));
+				bean.setFirstName(rs.getString(2));
+				bean.setLastName(rs.getString(3));
+				bean.setLogin(rs.getString(4));
+				bean.setPassword(rs.getString(5));
+				bean.setMobileNo(rs.getString(6));
+				bean.setEmailId(rs.getString(7));
+				bean.setUserId(rs.getLong(8));
+				bean.setRoleId(rs.getLong(9));
+				bean.setCreatedBy(rs.getString(10));
+				bean.setModifiedBy(rs.getString(11));
+				bean.setCreatedDatetime(rs.getTimestamp(12));
+				bean.setModifiedDatetime(rs.getTimestamp(13));
+				bean.setImage(rs.getString(14));
+
+			}
+			rs.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Database Exception..", e);
+			throw new ApplicationException("Exception : Exception in getting User by login");
+		} finally {
+			JDBCDataSource.closeConnection(conn);
+		}
+		log.debug("Model findByLogin End");
+		return bean;
+	}
+	public UserBean findByPK(long pk) throws ApplicationException {
+		log.debug("Model findByPK Started");
+		StringBuffer sql = new StringBuffer("SELECT * FROM OF_USER WHERE ID=?");
+		UserBean bean = null;
+		Connection conn = null;
+
+		try {
+			conn = JDBCDataSource.getConnection();
+			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+			pstmt.setLong(1, pk);
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				bean = new UserBean();
+				bean.setId(rs.getLong(1));
+				bean.setFirstName(rs.getString(2));
+				bean.setLastName(rs.getString(3));
+				bean.setLogin(rs.getString(4));
+				bean.setPassword(rs.getString(5));
+				bean.setMobileNo(rs.getString(6));
+				bean.setEmailId(rs.getString(7));
+				bean.setUserId(rs.getLong(8));
+				bean.setRoleId(rs.getLong(9));
+				bean.setCreatedBy(rs.getString(10));
+				bean.setModifiedBy(rs.getString(11));
+				bean.setCreatedDatetime(rs.getTimestamp(12));
+				bean.setModifiedDatetime(rs.getTimestamp(13));
+				bean.setImage(rs.getString(14));
+
+			}
+			rs.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Database Exception..", e);
+			throw new ApplicationException("Exception : Exception in getting User by pk");
+		} finally {
+			JDBCDataSource.closeConnection(conn);
+		}
+		log.debug("Model findByPK End");
+		return bean;
+	}
+
+	public void update(UserBean bean) throws ApplicationException, DuplicateRecordException {
+		log.debug("Model update Started");
+		Connection conn = null;
+
+		UserBean beanExist = findByLogin(bean.getLogin());
+		if (beanExist != null && !(beanExist.getId() == bean.getId())) {
+			throw new DuplicateRecordException("LoginId is already exist");
+		}
+		
+		UserBean beanExist1 = findByMobileNo(bean.getMobileNo());
+		if (beanExist1 != null && !(beanExist1.getId() == bean.getId())) {
+			throw new DuplicateRecordException("Mobile No is already Register");
+		}
+
+		try {
+			conn = JDBCDataSource.getConnection();
+			conn.setAutoCommit(false); // Begin transaction
+			PreparedStatement pstmt = conn.prepareStatement(
+					"UPDATE OF_USER SET FIRSTNAME=?,LASTNAME=?,LOGIN=?,PASSWORD=?,MOBILENO=?,emailId=?,userId=?,ROLEID=?,"
+					+ "CREATEDBY=?,MODIFIEDBY=?,CREATEDDATETIME=?,MODIFIEDDATETIME=?,image=? WHERE ID=?");
+			pstmt.setString(1, bean.getFirstName());
+			pstmt.setString(2, bean.getLastName());
+			pstmt.setString(3, bean.getLogin());
+			pstmt.setString(4, bean.getPassword());
+			pstmt.setString(5, bean.getMobileNo());
+			pstmt.setString(6, bean.getEmailId());
+			pstmt.setLong(7,bean.getUserId());
+			pstmt.setLong(8, bean.getRoleId());
+			pstmt.setString(9, bean.getCreatedBy());
+			pstmt.setString(10, bean.getModifiedBy());
+			pstmt.setTimestamp(11, bean.getCreatedDatetime());
+			pstmt.setTimestamp(12, bean.getModifiedDatetime());
+			pstmt.setString(13,bean.getImage());
+			pstmt.setLong(14, bean.getId());
+			pstmt.executeUpdate();
+			conn.commit(); // End transaction
+			pstmt.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Database Exception..", e);
+			try {
+				conn.rollback();
+			} catch (Exception ex) {
+				throw new ApplicationException("Exception : Delete rollback exception " + ex.getMessage());
+			}
+			throw new ApplicationException("Exception in updating User ");
+		} finally {
+			JDBCDataSource.closeConnection(conn);
+		}
+		log.debug("Model update End");
+	}
+	public List search(UserBean bean) throws ApplicationException {
 		return search(bean, 0, 0);
 	}
+
+
 	public List search(UserBean bean, int pageNo, int pageSize) throws ApplicationException {
 		log.debug("Model search Started");
 		StringBuffer sql = new StringBuffer("SELECT * FROM OF_USER WHERE 1=1");
@@ -195,7 +376,6 @@ public class UserModel {
 		}
 
 		if (pageSize > 0) {
-
 			pageNo = (pageNo - 1) * pageSize;
 
 			sql.append(" Limit " + pageNo + ", " + pageSize);
@@ -242,13 +422,12 @@ public class UserModel {
 	public List list() throws ApplicationException {
 		return list(0, 0);
 	}
+
 	public List list(int pageNo, int pageSize) throws ApplicationException {
 		log.debug("Model list Started");
 		ArrayList list = new ArrayList();
 		StringBuffer sql = new StringBuffer("select * from OF_USER");
-		// if page size is greater than zero then apply pagination
 		if (pageSize > 0) {
-			// Calculate start record index
 			pageNo = (pageNo - 1) * pageSize;
 			sql.append(" limit " + pageNo + "," + pageSize);
 		}
@@ -293,6 +472,7 @@ public class UserModel {
 		return list;
 
 	}
+
 
 	public UserBean authenticate(String login, String password) throws ApplicationException {
 		log.debug("Model authenticate Started");
@@ -378,5 +558,117 @@ public class UserModel {
 
 		log.debug("Model authenticate End");
 		return bean;
+	}
+
+		public boolean changePassword(Long id, String oldPassword, String newPassword)
+				throws RecordNotFoundException, ApplicationException {
+
+			log.debug("model changePassword Started");
+			
+			boolean flag = false;
+			
+			UserBean beanExist = null;
+
+			beanExist = findByPK(id);
+			
+			if (beanExist != null && beanExist.getPassword().equals(oldPassword)) {
+				beanExist.setPassword(newPassword);
+				try {
+					update(beanExist);
+				} catch (DuplicateRecordException e) {
+					log.error(e);
+					throw new ApplicationException("LoginId is already exist");
+				}
+				flag = true;
+			} else {
+				throw new RecordNotFoundException("Old password is Invalid");
+			}
+
+			HashMap<String, String> map = new HashMap<String, String>();
+
+			map.put("login", beanExist.getLogin());
+			map.put("password", beanExist.getPassword());
+			map.put("firstName", beanExist.getFirstName());
+			map.put("lastName", beanExist.getLastName());
+
+			String message = EmailBuilder.getChangePasswordMessage(map);
+
+			EmailMessage msg = new EmailMessage();
+
+			msg.setTo(beanExist.getLogin());
+			msg.setSubject("SUNARYS ORS Password has been changed Successfully.");
+			msg.setMessage(message);
+			msg.setMessageType(EmailMessage.HTML_MSG);
+
+			try {
+				EmailUtility.sendMail(msg);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			log.debug("Model changePassword End");
+			return flag;
+
+		}
+
+	public UserBean updateAccess(UserBean bean) throws ApplicationException {
+		return null;
+	}
+	public long registerUser(UserBean bean)
+			throws ApplicationException, DuplicateRecordException {
+
+		log.debug("Model add Started");
+
+		long pk = add(bean);
+
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("login", bean.getLogin());
+		map.put("password", bean.getPassword());
+
+		String message = EmailBuilder.getUserRegistrationMessage(map);
+
+		EmailMessage msg = new EmailMessage();
+
+		msg.setTo(bean.getLogin());
+		msg.setSubject("Registration is successful for ORS Project SunilOS");
+		msg.setMessage(message);
+		msg.setMessageType(EmailMessage.HTML_MSG);
+
+		try {
+			EmailUtility.sendMail(msg);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return pk;
+	}
+
+	public boolean forgetPassword(String login)
+			throws ApplicationException, RecordNotFoundException, ApplicationException {
+		UserBean userData = findByLogin(login);
+		
+		boolean flag = false;
+
+		if (userData == null) {
+			throw new RecordNotFoundException("Email ID does not exists !");
+
+		}
+
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("login", userData.getLogin());
+		map.put("password", userData.getPassword());
+		map.put("firstName", userData.getFirstName());
+		map.put("lastName", userData.getLastName());
+		String message = EmailBuilder.getForgetPasswordMessage(map);
+		EmailMessage msg = new EmailMessage();
+		msg.setTo(userData.getEmailId());
+		msg.setSubject("SUNARYS ORS Password reset");
+		msg.setMessage(message);
+		msg.setMessageType(EmailMessage.HTML_MSG);
+		EmailUtility.sendMail(msg);
+		flag = true;
+
+		return flag;
 	}
 }

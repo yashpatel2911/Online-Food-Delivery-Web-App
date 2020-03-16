@@ -21,11 +21,13 @@ import in.co.online.food.delivery.util.DataUtility;
 import in.co.online.food.delivery.util.DataValidator;
 import in.co.online.food.delivery.util.PropertyReader;
 import in.co.online.food.delivery.util.ServletUtility;
+
 @WebServlet(name = "UserRegistrationCtl", urlPatterns = { "/UserRegistrationCtl" })
 public class UserRegistrationCtl extends BaseCtl {
 	public static final String OP_SIGN_UP = "SignUp";
 
 	private static Logger log = Logger.getLogger(UserRegistrationCtl.class);
+	@Override
 	protected boolean validate(HttpServletRequest request) {
 		log.debug("UserRegistrationCtl Method validate Started");
 
@@ -103,6 +105,8 @@ public class UserRegistrationCtl extends BaseCtl {
 			log.debug("UserRegistrationCtl Method validate Ended");
 		return pass;
 	}
+	
+	@Override
 	protected BaseBean populateBean(HttpServletRequest request) {
 		log.debug("UserRegistrationCtl Method populatebean Started");
 
@@ -142,16 +146,19 @@ public class UserRegistrationCtl extends BaseCtl {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		log.debug("UserRegistrationCtl Method doGet Started");
 		ServletUtility.forward(getView(), request, response);
 
 	}
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("in post method");
 		log.debug("UserRegistrationCtl Method doPost Started");
 	
 		String op = DataUtility.getString(request.getParameter("operation"));
+		
 		UserModel model = new UserModel();
 		
 		long id = DataUtility.getLong(request.getParameter("id"));
@@ -161,6 +168,7 @@ public class UserRegistrationCtl extends BaseCtl {
 			
 			UserBean bean = (UserBean) populateBean(request);
 			try {
+			
 				long pk = model.registerUser(bean);
 				bean.setId(pk);
 			
@@ -185,6 +193,8 @@ public class UserRegistrationCtl extends BaseCtl {
 		}
 		log.debug("UserRegistrationCtl Method doPost Ended");
 	}
+
+	@Override
 	protected String getView() {
 		return OFDView.USER_REGISTRATION_VIEW;
 	}

@@ -14,12 +14,6 @@ public class RestaurantBean extends  BaseBean {
 	private String image;
 	private String contectNo;
 	
-	
-	
-	
-	
-	
-	
 	public String getContectNo() {
 		return contectNo;
 	}
@@ -100,9 +94,12 @@ public class RestaurantBean extends  BaseBean {
 		this.image = image;
 	}
 
+	@Override
 	public String getKey() {
 		return id+"";
 	}
+
+	@Override
 	public String getValue() {
 		return restaurantName;
 	}

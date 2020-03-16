@@ -40,10 +40,8 @@ public abstract class BaseCtl extends HttpServlet
 
 
 	public BaseCtl() {
-		// TODO Auto-generated constructor stub
 	}
-
-
+	
 	protected boolean validate(HttpServletRequest request) {
 		return true;
 		
@@ -52,13 +50,10 @@ public abstract class BaseCtl extends HttpServlet
 	protected void preload(HttpServletRequest request) {
 	}
 
-
 	protected BaseBean populateBean(HttpServletRequest request) {
-		return null;
+	return null;
 	}
 
-	
-	
 	protected BaseBean populateDTO(BaseBean dto, HttpServletRequest request) {
 		log.debug("BaseCtl populate DTO method start");
 	
@@ -73,6 +68,7 @@ public abstract class BaseCtl extends HttpServlet
 		} else {
 
 			modifiedBy = userbean.getLogin();
+
 			if ("null".equalsIgnoreCase(createdBy)|| DataValidator.isNull(createdBy)) {
 				createdBy = modifiedBy;
 			}
@@ -96,6 +92,7 @@ public abstract class BaseCtl extends HttpServlet
 		return dto;
 	}
 
+	@Override
 	protected void service(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException {
 		log.debug("BaseCtl service method start");
 		
@@ -104,7 +101,7 @@ public abstract class BaseCtl extends HttpServlet
 
 		String op = DataUtility.getString(request.getParameter("operation"));
 
-		System.out.println("operation ="+op);
+			System.out.println("operation ="+op);
 
 		if (DataValidator.isNotNull(op) && !OP_CANCEL.equalsIgnoreCase(op)&& !OP_VIEW.equalsIgnoreCase(op)&& !OP_DELETE.equalsIgnoreCase(op)&&!OP_RESET.equalsIgnoreCase(op)) {
 			if (!validate(request)) {
@@ -118,6 +115,7 @@ public abstract class BaseCtl extends HttpServlet
 		log.debug("BaseCtl service method end");
 		super.service(request, response);
 	}
+
 	protected abstract String getView();
 	
 }

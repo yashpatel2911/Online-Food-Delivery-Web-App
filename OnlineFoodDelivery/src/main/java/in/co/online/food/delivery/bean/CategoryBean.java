@@ -9,11 +9,6 @@ public class CategoryBean extends BaseBean {
 	private String description;
 	private String image;
 	
-	
-	
-	
-	
-	
 	public String getImage() {
 		return image;
 	}
@@ -62,11 +57,15 @@ public class CategoryBean extends BaseBean {
 		this.description = description;
 	}
 
-	public String getKey() {
+	@Override
+	public String getKey() 
+	{
 		return id+"";
 	}
 
-	public String getValue() {
+	@Override
+	public String getValue()
+	{
 		return categoryName;
 	}
 

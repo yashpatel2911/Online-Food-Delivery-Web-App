@@ -203,9 +203,8 @@ public class CategoryModel {
 		try {
 			conn = JDBCDataSource.getConnection();
 			pk = nextPK();
-			// Get auto-generated next primary key
 			System.out.println(pk + " in ModelJDBC");
-			conn.setAutoCommit(false); // Begin transaction
+			conn.setAutoCommit(false);
 			PreparedStatement pstmt = conn
 					.prepareStatement("INSERT INTO OF_CATEGORY VALUES(?,?,?,?,?,?,?,?,?,?,?)");
 			pstmt.setInt(1, pk);
@@ -268,6 +267,7 @@ public class CategoryModel {
 		Connection conn = null;
 
 		CategoryBean existbean = findByNameAndRestId(bean.getCategoryName(),bean.getRestaurantId());
+		// Check if updated LoginId already exist
 		if (existbean != null && !(existbean.getId() == bean.getId())) {
 			throw new DuplicateRecordException("Category is already this Restaurant");
 		}
@@ -314,7 +314,6 @@ public class CategoryModel {
 	public List search(CategoryBean bean) throws ApplicationException {
 		return search(bean, 0, 0);
 	}
-
 	public List search(CategoryBean bean, int pageNo, int pageSize) throws ApplicationException {
 		log.debug("Model search Started");
 		StringBuffer sql = new StringBuffer("SELECT * FROM OF_CATEGORY WHERE 1=1");

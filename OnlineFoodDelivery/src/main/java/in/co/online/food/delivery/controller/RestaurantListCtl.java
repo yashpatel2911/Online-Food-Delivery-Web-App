@@ -19,12 +19,14 @@ import in.co.online.food.delivery.model.RestaurantModel;
 import in.co.online.food.delivery.util.DataUtility;
 import in.co.online.food.delivery.util.PropertyReader;
 import in.co.online.food.delivery.util.ServletUtility;
+
 @WebServlet(name = "RestaurantListCtl", urlPatterns = { "/ctl/RestaurantListCtl" })
 public class RestaurantListCtl extends BaseCtl {
 	private static final long serialVersionUID = 1L;
        
 	private final Logger log = Logger.getLogger(RestaurantListCtl.class);
 
+	@Override
 	protected BaseBean populateBean(HttpServletRequest request) {
 		log.debug("RestaurantList  populateBean method start");
 		RestaurantBean bean = new RestaurantBean();
@@ -36,6 +38,7 @@ public class RestaurantListCtl extends BaseCtl {
 
 		return bean;
 	}
+
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		log.debug("RestaurantList  doGet method start");
@@ -79,6 +82,7 @@ public class RestaurantListCtl extends BaseCtl {
 		log.debug("RestaurantList  doGet method end");
 
 	}
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		log.debug("RestaurantList  doPost method start");
@@ -153,6 +157,7 @@ public class RestaurantListCtl extends BaseCtl {
 		log.debug("RestaurantList  doPost method end");
 	}
 
+	@Override
 	protected String getView() {
 		return OFDView.RESTAURANT_LIST_VIEW;
 	}

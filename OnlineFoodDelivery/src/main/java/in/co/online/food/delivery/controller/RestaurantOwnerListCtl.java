@@ -19,12 +19,14 @@ import in.co.online.food.delivery.model.UserModel;
 import in.co.online.food.delivery.util.DataUtility;
 import in.co.online.food.delivery.util.PropertyReader;
 import in.co.online.food.delivery.util.ServletUtility;
+
 @WebServlet(name = "RestaurantOwnerListCtl", urlPatterns = { "/ctl/RestaurantOwnerListCtl" })
 public class RestaurantOwnerListCtl extends BaseCtl {
 	private static final long serialVersionUID = 1L;
        
    
     private final Logger log = Logger.getLogger(RestaurantOwnerListCtl.class);
+	@Override
 	protected BaseBean populateBean(HttpServletRequest request) {
 		log.debug("RestaurantOwnerList  populateBean method start");
 		UserBean bean = new UserBean();
@@ -80,6 +82,7 @@ public class RestaurantOwnerListCtl extends BaseCtl {
 		log.debug("RestaurantOwnerList  doGet method end");
 
 	}
+
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -139,6 +142,7 @@ public class RestaurantOwnerListCtl extends BaseCtl {
 
 			bean.setRoleId(2L);
 			list = model.search(bean, pageNo, pageSize);
+
 			if (list == null || list.size() == 0 && !OP_DELETE.equalsIgnoreCase(op)) {
 				ServletUtility.setErrorMessage("No record found ", request);
 			}
@@ -155,6 +159,7 @@ public class RestaurantOwnerListCtl extends BaseCtl {
 		log.debug("RestaurantOwnerList  doPost method end");
 	}
 
+	@Override
 	protected String getView() {
 		return OFDView.RESTAURANT_OWNER_LIST_VIEW;
 	}

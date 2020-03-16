@@ -8,7 +8,7 @@ public class PropertyReader
 
     private static ResourceBundle rb = ResourceBundle.getBundle("in.co.online.food.delivery.bundle.system");
 
-
+ 
     public static String getValue(String key) {
 
         String val = null;
@@ -23,6 +23,7 @@ public class PropertyReader
 
     }
 
+
     public static String getValue(String key, String param) {
         String msg = getValue(key);
         msg = msg.replace("{0}", param);
@@ -36,6 +37,7 @@ public class PropertyReader
         }
         return msg;
     }
+   
    
     public static void main(String[] args) {
         String params =  "email" ;

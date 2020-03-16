@@ -18,12 +18,14 @@ import in.co.online.food.delivery.util.DataUtility;
 import in.co.online.food.delivery.util.DataValidator;
 import in.co.online.food.delivery.util.PropertyReader;
 import in.co.online.food.delivery.util.ServletUtility;
+
 @WebServlet(name = "ForgetPasswordCtl", urlPatterns = { "/ForgetPasswordCtl" })
 public class ForgetPasswordCtl extends BaseCtl {
 private static final long serialVersionUID = 1L;
 	
 	private static Logger log = Logger.getLogger(ForgetPasswordCtl.class);
-       
+    
+	@Override
 	protected boolean validate(HttpServletRequest request) {
 		log.debug("ForgetPasswordCtl validate  Method Started");
 
@@ -41,6 +43,7 @@ private static final long serialVersionUID = 1L;
         return pass;
 	}
 
+	@Override
 	protected BaseBean populateBean(HttpServletRequest request) {
 		 log.debug("ForgetPasswordCtl Method populatebean Started");
 
@@ -52,8 +55,6 @@ private static final long serialVersionUID = 1L;
 
 	        return bean;
 	}
-
-		
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		log.debug("ForgetPasswordCtl Method doGet Started");
 
@@ -66,6 +67,7 @@ private static final long serialVersionUID = 1L;
 
         UserBean bean = (UserBean) populateBean(request);
 
+        // get model
         UserModel model = new UserModel();
 
         if (OP_GO.equalsIgnoreCase(op)) {
@@ -89,6 +91,7 @@ private static final long serialVersionUID = 1L;
 
         log.debug("ForgetPasswordCtl Method doPost Ended");
 	}
+	@Override
 	protected String getView() {
 		 return OFDView.FORGET_PASSWORD_VIEW;
 	}

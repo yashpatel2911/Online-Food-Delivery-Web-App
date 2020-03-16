@@ -13,9 +13,11 @@ import in.co.online.food.delivery.exception.ApplicationException;
 import in.co.online.food.delivery.exception.DatabaseException;
 import in.co.online.food.delivery.exception.DuplicateRecordException;
 import in.co.online.food.delivery.util.JDBCDataSource;
+
 public class RoleModel 
 {
 	private static Logger log = Logger.getLogger(RoleModel.class);
+
     public Integer nextPK() throws DatabaseException {
         log.debug("Model nextPK Started");
         Connection conn = null;
@@ -45,12 +47,14 @@ public class RoleModel
         Connection conn = null;
         int pk = 0;
 		RoleBean duplicataRole = findByName(bean.getName());
+
         if (duplicataRole != null) {
             throw new DuplicateRecordException("Role already exists");
         }
         try {
             conn = JDBCDataSource.getConnection();
             pk = nextPK();
+
             System.out.println(pk + " in ModelJDBC");
             conn.setAutoCommit(false); // Begin transaction
             PreparedStatement pstmt = conn
@@ -141,7 +145,6 @@ public class RoleModel
         log.debug("Model findBy EmailId End");
         return bean;
     }
-
     public RoleBean findByPK(long pk) throws ApplicationException {
         log.debug("Model findByPK Started");
         StringBuffer sql = new StringBuffer("SELECT * FROM OF_ROLE WHERE ID=?");
@@ -179,6 +182,7 @@ public class RoleModel
         log.debug("Model update Started");
         Connection conn = null;
 		RoleBean duplicataRole = findByName(bean.getName());
+
         if (duplicataRole != null && duplicataRole.getId() != bean.getId()) {
             throw new DuplicateRecordException("Role already exists");
         }
@@ -212,10 +216,10 @@ public class RoleModel
         }
         log.debug("Model update End");
     }
-
     public List search(RoleBean bean) throws ApplicationException {
         return search(bean, 0, 0);
     }
+
     public List search(RoleBean bean, int pageNo, int pageSize)
             throws ApplicationException {
         log.debug("Model search Started");
@@ -267,13 +271,15 @@ public class RoleModel
         return list;
     }
 
+    public List list() throws ApplicationException {
+        return list(0, 0);
+    }
+
     public List list(int pageNo, int pageSize) throws ApplicationException {
         log.debug("Model list Started");
         ArrayList list = new ArrayList();
         StringBuffer sql = new StringBuffer("select * from OF_ROLE");
-        // if page size is greater than zero then apply pagination
         if (pageSize > 0) {
-            // Calculate start record index
             pageNo = (pageNo - 1) * pageSize;
             sql.append(" limit " + pageNo + "," + pageSize);
         }
@@ -295,6 +301,7 @@ public class RoleModel
             }
             rs.close();
         } catch (Exception e) {
+          //  log.error("Database Exception..", e);
             throw new ApplicationException(
                     "Exception : Exception in getting list of Role");
         } finally {

@@ -28,6 +28,7 @@ public class TestImage {
 			conn.close();
 			
 		} catch (Exception e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

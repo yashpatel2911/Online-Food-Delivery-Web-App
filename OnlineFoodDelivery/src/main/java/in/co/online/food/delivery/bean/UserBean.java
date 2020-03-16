@@ -100,7 +100,7 @@ public class UserBean extends BaseBean {
 	public long getRoleId() {
 		return roleId;
 	}
-
+	
 	public void setRoleId(long roleId) {
 		this.roleId = roleId;
 	}

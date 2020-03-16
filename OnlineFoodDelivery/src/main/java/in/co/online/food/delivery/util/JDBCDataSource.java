@@ -7,14 +7,20 @@ import java.util.ResourceBundle;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 import in.co.online.food.delivery.exception.ApplicationException;
+
+
 public class JDBCDataSource
 {
+
+	
     private static JDBCDataSource datasource;
 
     private JDBCDataSource() {
     }
 
     private ComboPooledDataSource cpds = null;
+
+   
     public static JDBCDataSource getInstance() {
         if (datasource == null) {
 
@@ -39,6 +45,10 @@ public class JDBCDataSource
 
         }
         return datasource;
+    }
+
+    public static Connection getConnection() throws Exception {
+        return getInstance().cpds.getConnection();
     }
 
     public static void closeConnection(Connection connection) {

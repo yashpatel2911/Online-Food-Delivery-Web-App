@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 import in.co.online.food.delivery.util.ServletUtility;
+
 @WebFilter(filterName="FrontCtl",urlPatterns={"/ctl/*","/doc/*"})
 public class FrontController implements Filter {
 
@@ -53,8 +54,6 @@ public class FrontController implements Filter {
 	
 
 	public void init(FilterConfig conf) throws ServletException {
-		// TODO Auto-generated method stub
-
 	}
 
 }

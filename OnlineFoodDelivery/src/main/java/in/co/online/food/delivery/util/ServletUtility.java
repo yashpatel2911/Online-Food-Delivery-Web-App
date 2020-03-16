@@ -12,8 +12,6 @@ import in.co.online.food.delivery.bean.BaseBean;
 import in.co.online.food.delivery.controller.BaseCtl;
 import in.co.online.food.delivery.controller.OFDView;
 
-
-
 public class ServletUtility {
 
 	public static void forward(String page, HttpServletRequest request, HttpServletResponse response)
@@ -104,6 +102,8 @@ public class ServletUtility {
 	public static List getList(HttpServletRequest request) {
 		return (List) request.getAttribute("list");
 	}
+
+
 	public static void setPageNo(int pageNo, HttpServletRequest request) {
 		request.setAttribute("pageNo", pageNo);
 	}

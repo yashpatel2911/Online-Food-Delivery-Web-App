@@ -13,6 +13,8 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.net.SyslogAppender;
 
 import in.co.online.food.delivery.util.ServletUtility;
+
+ 
 @WebServlet(name = "WelcomeCtl", urlPatterns = { "/WelcomeCtl" })
 public class WelcomeCtl extends BaseCtl {
 	
@@ -23,8 +25,8 @@ public class WelcomeCtl extends BaseCtl {
 			ServletUtility.forward(OFDView.WELCOME_VIEW, request, response);
 	
 	}
+	@Override
 	protected String getView() {
-		// TODO Auto-generated method stub
 		return OFDView.WELCOME_VIEW;
 	}
 

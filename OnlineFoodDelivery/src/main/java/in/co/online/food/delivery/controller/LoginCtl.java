@@ -20,6 +20,7 @@ import in.co.online.food.delivery.util.DataUtility;
 import in.co.online.food.delivery.util.DataValidator;
 import in.co.online.food.delivery.util.PropertyReader;
 import in.co.online.food.delivery.util.ServletUtility;
+
 @WebServlet(name = "LoginCtl", urlPatterns = { "/LoginCtl" })
 public class LoginCtl extends BaseCtl {
 
@@ -37,6 +38,8 @@ public class LoginCtl extends BaseCtl {
 		super();
 	}
 
+	
+	@Override
 	protected boolean validate(HttpServletRequest request) {
 
 		log.debug("LoginCtl Method validate Started");
@@ -65,6 +68,7 @@ public class LoginCtl extends BaseCtl {
 		return pass;
 	}
 
+	@Override
 	protected BaseBean populateBean(HttpServletRequest request) {
 
 		log.debug("LoginCtl Method populateBean Started");
@@ -81,6 +85,7 @@ public class LoginCtl extends BaseCtl {
 
 		return bean;
 	}
+
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
@@ -132,7 +137,6 @@ public class LoginCtl extends BaseCtl {
 		HttpSession session = request.getSession(true);
 		
 		String op = DataUtility.getString(request.getParameter("operation"));
-		// get Model
 		UserModel model = new UserModel();
 		RoleModel role = new RoleModel();
 		
@@ -162,7 +166,6 @@ public class LoginCtl extends BaseCtl {
 					if (roleBean != null) {
 						session.setAttribute("role", roleBean.getName());
 					}
-					// save state of session remember URL
 					String uri = request.getParameter("uri");
 					
 					
@@ -194,7 +197,7 @@ public class LoginCtl extends BaseCtl {
 		ServletUtility.forward(getView(), request, response);
 		log.debug("UserCtl Method doPost Ended");
 	}
-
+	@Override
 	protected String getView() {
 		return OFDView.LOGIN_VIEW;
 	}
