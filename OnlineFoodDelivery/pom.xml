@@ -15,15 +15,7 @@
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.0.8</version>
-		</dependency>
-	
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<version>3.1.0</version>
-		</dependency>
-		
-		
+	  </dependency>	
 		
 		<dependency>
 			<groupId>log4j</groupId>
